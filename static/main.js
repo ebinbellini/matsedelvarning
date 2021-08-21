@@ -19,8 +19,8 @@ function main() {
 
 function move_cow() {
 	const cowe_dance = document.getElementById("dance");
-	const ww = window.innerWidth - cowe_dance.offsetWidth;
-	const wh = window.innerHeight - cowe_dance.offsetHeight;
+	const ww = window.innerWidth - cowe_dance.offsetWidth * 1.5;
+	const wh = window.innerHeight - cowe_dance.offsetHeight * 1.5;
 
 	cowe_dance.style.left = Math.random() * ww + "px";
 	cowe_dance.style.top = Math.random() * wh + "px";
