@@ -52,7 +52,6 @@ async function request_notification_permission() {
 	}).then(subscription => {
 		send_subscription_to_server(subscription);
 	}).catch(e => {
-		console.log(e);
 		display_snackbar("Unable to register push notification subscription. Check your connection!")
 	});
 }
