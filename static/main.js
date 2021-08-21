@@ -8,6 +8,22 @@ let sw_registration = null;
 window.onload = main;
 function main() {
 	register_service_worker();
+
+	const cowe_dance = document.getElementById("dance");
+	cowe_dance.classList.add("activated");
+	setTimeout(() => {
+		move_cow();
+		setInterval(move_cow, 1000);
+	}, 500);
+}
+
+function move_cow() {
+	const cowe_dance = document.getElementById("dance");
+	const ww = window.innerWidth - cowe_dance.offsetWidth;
+	const wh = window.innerHeight - cowe_dance.offsetHeight;
+
+	cowe_dance.style.left = Math.random() * ww + "px";
+	cowe_dance.style.top = Math.random() * wh + "px";
 }
 
 function register_service_worker() {

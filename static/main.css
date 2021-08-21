@@ -1,0 +1,102 @@
+* {
+	margin: 0;
+}
+
+body {
+	background: linear-gradient(90deg, #111, #222);
+	text-align: center;
+	color: #fafafa;
+}
+
+h2 {
+	font-size: 20px;
+	text-align: center;
+	margin-top: 128px;
+}
+
+#snackbar-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    pointer-events: none;
+    width: calc(100% - 16px);
+    max-width: 700px;
+    z-index: 40;
+    text-align: center;
+}
+
+.snackbar-content {
+    display: inline-block;
+    text-align: left;
+    background-color: #fafafa;
+    color: #323232;
+    border: 3px solid #323232;
+    font-weight: 500;
+    line-height: 20px;
+    font-size: 16px;
+    min-height: 36px;
+    border-radius: 4px;
+    pointer-events: all;
+    box-sizing: border-box;
+    padding: 12px 16px;
+}
+
+.snackbar {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    margin-bottom: -44px;
+    pointer-events: none;
+    transition: margin-bottom 225ms cubic-bezier(0.4, 0.0, 1, 1), color 150ms 75ms;
+    text-align: center;
+    color: rgba(256, 256, 256, 1);
+}
+
+.snackbar.slideUp {
+    transition: margin-bottom 200ms cubic-bezier(0.0, 0.0, 0.2, 1), color 150ms 75ms;
+    margin-bottom: 8px;
+}
+
+#dance.activated {
+	position: absolute;
+	top: 50px;
+	left: 50px;
+	animation: 1s infinite linear cowe-dance;
+}
+
+button {
+	padding: 8px 12px;
+	border: none;
+	border-radius: 4px;
+	background: #fafafa;
+	margin: 12px auto;
+	font-size: 20px;
+	cursor: pointer;
+	background: linear-gradient(#6e1d1d, #4d0808);
+	color: #fafafa;
+	transition: 200ms;
+}
+
+button:hover {
+	transform: scale(2);
+}
+
+button:active {
+	animation: 0.4s infinite linear cowe-dance;
+}
+
+@keyframes cowe-dance {
+	0% {
+		transform: scale(1) rotate(0);
+	}
+
+	50% {
+		transform: scale(0) rotate(0.5turn);
+	}
+
+	100% {
+		transform: scale(1) rotate(1turn);
+	}
+}
