@@ -40,6 +40,7 @@ type DayMenu struct {
 var subs []webpush.Subscription
 var days []DayMenu
 
+// TODO store in file
 var vapidPublic string
 var vapidPrivate string
 

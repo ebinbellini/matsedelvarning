@@ -22,7 +22,13 @@ h2 {
 	max-width: 700px;
 	width: 95%;
 	text-align: center;
-	margin: auto;
+	margin: 4px auto;
+}
+
+h3 {
+	margin-top: 32px;
+	font-size: 32px;
+	font-family: serif;
 }
 
 #snackbar-container {
@@ -71,7 +77,7 @@ h2 {
 }
 
 #dance.activated {
-	position: absolute;
+	position: fixed;
 	top: 50px;
 	left: 50px;
 	animation: 1s infinite linear cowe-dance;
@@ -110,4 +116,28 @@ button:active {
 	100% {
 		transform: scale(1) rotate(1turn);
 	}
+}
+
+#kalender {
+	margin: 16px auto;
+	border-collapse: collapse;
+}
+
+#kalender th, #kalender td {
+	background: #060504;
+	border: 2px solid #aaa;
+	padding: 6px 8px;
+}
+
+#kalender td {
+	background: #333;
+	border: 2px solid #777;
+}
+
+#kalender .warn {
+	background: #4d0808;
+}
+
+a {
+	color: #7171da;
 }
