@@ -1,7 +1,8 @@
 {{define "kalender"}}
-<table id="kalender">
+{{range .Months}}
+<table class="kalender">
 	<tr>
-		<th colspan="7">December 1337</th>
+		<th colspan="7">{{.Name}}</th>
 	</tr>
 	<tr>
 		<th>Mån</th>
@@ -13,9 +14,10 @@
 		<th>Sön</th>
 	</tr>
 	{{range .Weeks}}<tr>
-		{{range .Days}}<td {{if .Vego}}class="warn"{{end}}>{{.DayOfMonth}}</td>
+		{{range .Days}}<td{{if .Vego}} class="warn"{{end}}>{{.DayOfMonth}}</td>
 		{{end}}
 	</tr>
 	{{end}}
 </table>
+{{end}}
 {{end}}

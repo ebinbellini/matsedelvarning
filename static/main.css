@@ -118,23 +118,23 @@ button:active {
 	}
 }
 
-#kalender {
+.kalender {
 	margin: 16px auto;
 	border-collapse: collapse;
 }
 
-#kalender th, #kalender td {
+.kalender th, .kalender td {
 	background: #060504;
 	border: 2px solid #aaa;
 	padding: 6px 8px;
 }
 
-#kalender td {
+.kalender td {
 	background: #333;
 	border: 2px solid #777;
 }
 
-#kalender .warn {
+.kalender .warn {
 	background: #4d0808;
 }
 
