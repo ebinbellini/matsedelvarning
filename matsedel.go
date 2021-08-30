@@ -76,7 +76,6 @@ func awaitNextVegoDay() {
 			return
 		}
 	}
-
 }
 
 func warnAtPoint(point time.Time) {
@@ -181,7 +180,7 @@ func respondToSubscribePush(w http.ResponseWriter, r *http.Request) {
 
 	// Store subscription on disk
 	fileName := "webpushsubs"
-	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_APPEND, 0755)
+	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0755)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, err)
