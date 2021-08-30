@@ -2,27 +2,22 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 	"time"
 
 	webpush "github.com/SherClockHolmes/webpush-go"
 )
 
+// TODO allow updating web push subscriptions
 type SubscriptionUpdate struct {
 	OldEndpoint string
 	WebSub      *webpush.Subscription
-}
-
-// NotificationContents Contains all the information that is sent through web push
-type NotificationContents struct {
-	Title  string
-	Text   string
-	Image  string
-	Name   string // The name of the reciever
-	Action string
 }
 
 type DayMenuRaw struct {
@@ -40,7 +35,6 @@ type DayMenu struct {
 var subs []webpush.Subscription
 var days []DayMenu
 
-// TODO store in file
 var vapidPublic string
 var vapidPrivate string
 
@@ -92,15 +86,15 @@ func warnAtPoint(point time.Time) {
 	<-t.C
 
 	warnAllUsers()
+
+	// Wait for next warning
+	awaitNextVegoDay()
 }
 
 func warnAllUsers() {
 	for _, sub := range subs {
 		sendNotificationToUser([]byte("WARNING: Vegetarian lunch tomorrow"), &sub)
 	}
-
-	// Wait for next warning
-	awaitNextVegoDay()
 }
 
 func readMenuData() {
@@ -138,10 +132,41 @@ func respondToGetVapidPublic(w http.ResponseWriter, r *http.Request) {
 }
 
 func initWebPush() {
-	var err error
-	vapidPrivate, vapidPublic, err = webpush.GenerateVAPIDKeys()
+	// Read vapid keys or generate if they don't exist
+	fileName := "vapid keys"
+	stored, err := os.ReadFile(fileName)
 	if err != nil {
-		fmt.Println(err)
+		if errors.Is(err, os.ErrNotExist) {
+			vapidPrivate, vapidPublic, err = webpush.GenerateVAPIDKeys()
+			if err != nil {
+				log.Fatal(err)
+			}
+			data := []byte(vapidPrivate + "\n" + vapidPublic)
+			os.WriteFile(fileName, data, 0666)
+		} else {
+			log.Fatal(err)
+		}
+	} else {
+		keys := strings.Split(string(stored), "\n")
+		vapidPrivate = keys[0]
+		vapidPublic = keys[1]
+	}
+
+	// Read push subscribers from disk
+	content, err := os.ReadFile("webpushsubs")
+	if err != nil {
+		if !errors.Is(err, os.ErrNotExist) {
+			log.Fatal(err)
+		} else {
+			fmt.Println("webpushsubs file does not exist. I'll skip reding from it.")
+		}
+	}
+
+	wpsubs := strings.Split(string(content), "\n")
+	for _, wpsub := range wpsubs[0 : len(wpsubs)-1] {
+		sub := &webpush.Subscription{}
+		json.Unmarshal([]byte(wpsub), sub)
+		subs = append(subs, *sub)
 	}
 }
 
@@ -152,7 +177,23 @@ func respondToSubscribePush(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Store subscription
+	// Store subscription on disk
+	fileName := "webpushsubs"
+	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_APPEND, 0755)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, err)
+		return
+	}
+	defer file.Close()
+	_, err = file.Write([]byte(string(body) + "\n"))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, err)
+		return
+	}
+
+	// Also store it in RAM
 	sub := &webpush.Subscription{}
 	json.Unmarshal(body, sub)
 	subs = append(subs, *sub)
