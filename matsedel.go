@@ -68,8 +68,8 @@ func awaitNextVegoDay() {
 
 		warnPoint := day.Date
 
-		// Go to 15:00 day before
-		warnPoint = warnPoint.Add(-9 * time.Hour)
+		// Go to 17:00 UTC the day before, which is 15:00 in Swedish summer time
+		warnPoint = warnPoint.Add(17 * time.Hour)
 
 		if warnPoint.After(now) {
 			warnAtPoint(warnPoint)
@@ -81,6 +81,8 @@ func awaitNextVegoDay() {
 
 func warnAtPoint(point time.Time) {
 	waitDur := point.Sub(time.Now())
+
+	fmt.Println("Will warn at ", point)
 
 	t := time.NewTimer(waitDur)
 	<-t.C
