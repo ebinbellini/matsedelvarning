@@ -57,7 +57,7 @@ func main() {
 }
 
 func awaitNextVegoDay() {
-	now := time.Now()
+	now := time.Now().In(time.UTC)
 	if now.Hour() > 15 {
 		now.Add(24 * time.Hour)
 	}
