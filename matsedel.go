@@ -70,7 +70,7 @@ func awaitNextVegoDay() {
 		warnPoint := day.Date
 
 		// Go to 17:00 UTC the day before, which is 15:00 in Swedish summer time
-		warnPoint = warnPoint.Add(17 * time.Hour)
+		warnPoint = warnPoint.Add((-24 + 17) * time.Hour)
 
 		if warnPoint.After(now) {
 			warnAtPoint(warnPoint)
