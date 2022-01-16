@@ -2,9 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
+	"regexp"
+	"strings"
 )
 
 type WeekData struct {
@@ -40,8 +42,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println(string([]byte(res)[0:300]))
 
 	ioutil.WriteFile("out.json", res, 0777)
 }
@@ -84,7 +84,7 @@ func parseMenuData(menu []byte) []DayOut {
 }
 
 func fetchMenu() []byte {
-	/*resp, err := http.Get("https://mpi.mashie.com/public/menu/uppsala+kommun/00e57ed5?country=se")
+	resp, err := http.Get("https://mpi.mashie.com/public/menu/uppsala+kommun/00e57ed5?country=se")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -96,18 +96,20 @@ func fetchMenu() []byte {
 
 	startDelim := "var weekData = "
 	start := strings.Index(string(body), startDelim) + len(startDelim)
-
 	end := strings.Index(string(body), "\n</script>")
+	menu := body[start:end]
 
-	fmt.Println(start)
-	fmt.Println(end)
+	// Change date format from JS to JSON compatible
+	rgx := regexp.MustCompile(`new Date\(([0-9]+)\)`)
+	rpl := []byte(`"${1}"`)
+	menu = rgx.ReplaceAll(menu, rpl)
 
-	return body[start:end]*/
+	return menu
 
-	json, err := ioutil.ReadFile("in.json")
+	/*json, err := ioutil.ReadFile("in.json")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return json
+	return json*/
 }

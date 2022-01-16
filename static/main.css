@@ -100,9 +100,9 @@ button:hover {
 	transform: scale(1.5);
 }
 
-button:active {
+/*button:active {
 	animation: 0.4s infinite linear cowe-dance;
-}
+}*/
 
 @keyframes cowe-dance {
 	0% {

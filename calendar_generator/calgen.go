@@ -74,16 +74,12 @@ func readMenuData() []DayMenu {
 	}
 
 	for _, rd := range raw {
-		format := "2006-01-02"
-		cut := string([]byte(rd.Date)[0:len(format)])
-
-		dt, err := time.Parse(format, cut)
+		// Base 0 lol
+		ms, err := strconv.ParseInt(rd.Date, 0, 64)
 		if err != nil {
 			fmt.Println(err)
 		}
-
-		// For some reason they are one day behind
-		dt = dt.Add(24 * time.Hour)
+		dt := time.UnixMilli(ms)
 
 		dm := DayMenu{
 			Vego:       rd.Vego,
